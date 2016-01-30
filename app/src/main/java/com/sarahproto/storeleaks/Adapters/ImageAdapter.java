@@ -1,6 +1,7 @@
 package com.sarahproto.storeleaks.Adapters;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +9,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sarahproto.storeleaks.R;
 
-public class ImageAdapter extends BaseAdapter{
+public class ImageAdapter extends BaseAdapter {
 
     String[] result;
     int[] imageId;
@@ -35,7 +35,7 @@ public class ImageAdapter extends BaseAdapter{
     @Override
     public int getCount() {
         // number of datelements to be displayed.
-        return result.length-1;
+        return result.length - 1;
     }
 
     @Override
@@ -65,10 +65,23 @@ public class ImageAdapter extends BaseAdapter{
         holder.tv.setText(result[position]);
         holder.img.setImageResource(imageId[position]);
 
+        // click the items of the search result.
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "You clicked" + result[position], Toast.LENGTH_LONG).show();
+                Dialog detailsDialog = new Dialog(context);
+                detailsDialog.setContentView(R.layout.result_details_activity);
+
+                TextView nameTxt = (TextView) detailsDialog.findViewById(R.id.nameTxt);
+                TextView shopNametxt = (TextView) detailsDialog.findViewById(R.id.shopNameTxt);
+                TextView locationTxt = (TextView) detailsDialog.findViewById(R.id.locationTxt);
+                TextView descriptionTxt = (TextView) detailsDialog.findViewById(R.id.descriptionTxt);
+
+                detailsDialog.setTitle("Item Details");
+                nameTxt.setText(result[position]);
+
+                detailsDialog.show();
+
             }
         });
 

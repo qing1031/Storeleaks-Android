@@ -29,9 +29,6 @@ import java.util.Locale;
 public class MainActivity extends Activity {
     SharedPreferences preferences;
     Double latitude, longitude;
-    String cityName = "";
-    String stateName = "";
-    String countryName = "";
 
     AppLocationService appLocationService;
 
