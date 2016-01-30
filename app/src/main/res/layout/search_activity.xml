@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_main"
+    android:orientation="vertical"
+    android:weightSum="10">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="220sp"
+            android:layout_height="70sp"
+            android:layout_gravity="center"
+            android:background="@drawable/font_img"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <com.mrunia.instagram.sdk.InstagramLoginButton
+            android:id="@+id/instagram_login_button"
+            android:layout_width="70dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Logout"
+            android:id="@+id/logout_btn"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/nameSearchEdit"
+        android:layout_width="match_parent"
+        android:layout_height="45sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/edit_text_background"
+        android:drawableLeft="@drawable/edit_search_icon"
+        android:hint="@string/search_edit_hint"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:paddingLeft="5sp" />
+
+    <EditText
+        android:id="@+id/locationSearchEdit"
+        android:layout_width="match_parent"
+        android:layout_height="45sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edit_text_background"
+        android:drawableLeft="@drawable/edit_location_icon"
+        android:hint="@string/location_edit_hint"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:paddingLeft="5sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:layout_weight="8"
+        android:orientation="vertical"
+        android:paddingTop="10dp">
+
+        <GridView
+            android:id="@+id/grid_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:columnWidth="90dp"
+            android:gravity="center"
+            android:numColumns="1"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="30sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_weight="2"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/location_btn"
+                android:layout_width="55sp"
+                android:layout_height="55sp"
+                android:layout_gravity="center"
+                android:background="@drawable/location_icon"
+                android:onClick="showLocationPage" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/search_btn"
+                android:layout_width="55sp"
+                android:layout_height="55sp"
+                android:background="@drawable/search_icon"
+                android:onClick="showSearchPage" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/camera_btn"
+                android:layout_width="55sp"
+                android:layout_height="55sp"
+                android:background="@drawable/camera_icon"
+                android:onClick="showCameraPage" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="right"
+            android:paddingRight="10dp">
+
+            <ImageButton
+                android:id="@+id/info_btn"
+                android:layout_width="55sp"
+                android:layout_height="55sp"
+                android:layout_gravity="center"
+                android:background="@drawable/informacion_icon"
+                android:onClick="showInfoPage" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

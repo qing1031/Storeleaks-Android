@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Storeleaks</string>
+
+    <string name="login_str">Sign up / Login ?</string>
+    <string name="understand_btn_str"><![CDATA[ok, I understand >>>>]]></string>
+    <string name="search_edit_hint">Seach the things</string>
+    <string name="location_edit_hint">City, state or country</string>
+    <string name="lib_str">Library</string>
+    <string name="cam_str">Camera</string>
+    <string name="select_picture">Select Picture</string>
+    <string name="msg_failed_to_get_intent_data">Failed to get intent data</string>
+    <string name="intro_details">storeleaks uses your location to search for nearby stores and show you the products and deals they have so you can buy them in person.</string>
+
+    <string name="facebook_app_id">857083521070957</string>
+    <string name="facebook_app_name">StoreleaksFB</string>
+
+    <string name="com_facebook_loginview_log_in_button_long">Facebook Login</string>
+    <string name="com_facebook_loginview_log_out_button">Logout</string>
+    <string name="logout_str">Logout</string>
+    <string name="login_facebook_str">Log in with Facebook</string>
+</resources>
