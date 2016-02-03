@@ -49,8 +49,6 @@ public class SearchActivity extends Activity {
     EditText nameSearchEdit, locSearchEdit;
     ProgressBar progressBar;
 
-    public String[] imageUrls;
-    public String[] imageNames;
     public String URL_PREFIX = "http://storeleaks.com/img/items/";
     public List<SearchItemResult> resultData;
 
@@ -237,8 +235,7 @@ public class SearchActivity extends Activity {
             public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
                 if (response.code() == HttpURLConnection.HTTP_OK) {
 
-                    imageUrls = new String[response.body().getData().size()];
-                    imageNames = new String[response.body().getData().size()];
+                    String[] imageUrls = new String[response.body().getData().size()];
 
                     resultData = response.body().getData();
 
@@ -251,11 +248,9 @@ public class SearchActivity extends Activity {
                         int amount = response.body().getData().size();
                         for (int i = 0; i < amount; i++) {
                             imageUrls[i] = URL_PREFIX + response.body().getData().get(i).getImages();
-                            imageNames[i] = response.body().getData().get(i).getName();
                         }
 
                         Log.d("ImageUrl Result", Arrays.toString(imageUrls));
-                        Log.d("ImageNames Result", Arrays.toString(imageNames));
 
                         // Get the images(bitmap) for the url result array.
                         GetXMLTask getXMLTask = new GetXMLTask();
