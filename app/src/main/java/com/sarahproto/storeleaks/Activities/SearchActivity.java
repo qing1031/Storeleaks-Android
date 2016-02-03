@@ -189,15 +189,15 @@ public class SearchActivity extends Activity {
                 0, 20);
 
         progressBar.setVisibility(View.VISIBLE);
-        nameSearchEdit.setClickable(false);
-        locSearchEdit.setClickable(false);
+        nameSearchEdit.setEnabled(false);
+        locSearchEdit.setEnabled(false);
     }
 
     // finish the searching.
     public void finishSearching() {
         progressBar.setVisibility(View.GONE);
-        nameSearchEdit.setClickable(true);
-        locSearchEdit.setClickable(true);
+        nameSearchEdit.setEnabled(true);
+        locSearchEdit.setEnabled(true);
     }
 
     public void logoutProfile() {
@@ -229,9 +229,9 @@ public class SearchActivity extends Activity {
     }
 
     // Items Search Request.
-    public void searchItems(String name, String cityName, int start_pos, int amount) {
+    public void searchItems(String name, String countryName, int start_pos, int amount) {
         StoreleaksAPIService client = StoreleaksAPIClient.newInstance(StoreleaksAPIService.class);
-        Call<SearchResponse> call = client.searchItem(name, cityName, start_pos, amount);
+        Call<SearchResponse> call = client.searchItem(name, countryName, start_pos, amount);
         call.enqueue(new Callback<SearchResponse>() {
             @Override
             public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
@@ -250,7 +250,7 @@ public class SearchActivity extends Activity {
 
                         int amount = response.body().getData().size();
                         for (int i = 0; i < amount; i++) {
-                            imageUrls[i] = URL_PREFIX + response.body().getData().get(i).getImg();
+                            imageUrls[i] = URL_PREFIX + response.body().getData().get(i).getImages();
                             imageNames[i] = response.body().getData().get(i).getName();
                         }
 
@@ -298,7 +298,7 @@ public class SearchActivity extends Activity {
             Log.d("Result", "Got one image");
             Log.d("Bitmap Result", Arrays.toString(result));
 
-            gv.setAdapter(new ImageAdapter(SearchActivity.this, imageNames, result, resultData));
+            gv.setAdapter(new ImageAdapter(SearchActivity.this, result, resultData));
 
             finishSearching();
         }

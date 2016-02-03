@@ -88,6 +88,26 @@
             android:textColor="@color/colorBlack" />
 
         <TextView
+            android:id="@+id/uploadDateTitleTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="40sp"
+            android:gravity="left"
+            android:text="Upload date"
+            android:textColor="#D0D0D0"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/uploadDateTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:textSize="25sp"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
             android:id="@+id/descriptionTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

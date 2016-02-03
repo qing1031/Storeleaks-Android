@@ -11,7 +11,7 @@ public class SearchItemResult {
     private String shop;
     private String own;
     private String datet;
-    private String img;
+    private String images;
     private String likes;
 
     public int getId() {
@@ -54,8 +54,8 @@ public class SearchItemResult {
         return datet;
     }
 
-    public String getImg() {
-        return img;
+    public String getImages() {
+        return images;
     }
 
     public String getLikes() {
@@ -75,7 +75,7 @@ public class SearchItemResult {
                 ", shop='" + shop + '\'' +
                 ", own='" + own + '\'' +
                 ", datet='" + datet + '\'' +
-                ", img='" + img + '\'' +
+                ", images='" + images + '\'' +
                 ", likes='" + likes + '\'' +
                 '}';
     }

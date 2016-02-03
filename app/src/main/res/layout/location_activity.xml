@@ -13,32 +13,32 @@
         <ImageView
             android:layout_width="220sp"
             android:layout_height="70sp"
-            android:layout_gravity="center"
-            android:background="@drawable/font_img"
+            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_gravity="center"
+            android:background="@drawable/font_img" />
 
         <com.mrunia.instagram.sdk.InstagramLoginButton
             android:id="@+id/instagram_login_button"
             android:layout_width="70dp"
             android:layout_height="25dp"
-            android:layout_gravity="center_horizontal"
-            android:visibility="gone"
-            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:text="Logout"
             android:id="@+id/logout_btn"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/colorWhite"
-            android:textSize="20sp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="5dp"
+            android:text="Logout"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <EditText
@@ -47,11 +47,14 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/edit_text_background"
+        android:editable="false"
         android:drawableLeft="@drawable/edit_location_icon"
-        android:hint="@string/search_edit_hint"
+        android:hint="Current Location"
+        android:enabled="false"
         android:imeOptions="actionSearch"
         android:inputType="text"
-        android:paddingLeft="5sp" />
+        android:paddingLeft="5sp"
+        android:text="Kiev" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -90,10 +93,10 @@
             <ImageButton
                 android:id="@+id/location_btn"
                 android:layout_width="50sp"
-                android:onClick="showLocationPage"
                 android:layout_height="50sp"
                 android:layout_gravity="center"
-                android:background="@drawable/location_icon" />
+                android:background="@drawable/location_icon"
+                android:onClick="showLocationPage" />
         </LinearLayout>
 
         <LinearLayout
@@ -106,8 +109,8 @@
                 android:id="@+id/search_btn"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
-                android:onClick="showSearchPage"
-                android:background="@drawable/search_icon" />
+                android:background="@drawable/search_icon"
+                android:onClick="showSearchPage" />
         </LinearLayout>
 
         <LinearLayout
@@ -120,8 +123,8 @@
                 android:id="@+id/camera_btn"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
-                android:onClick="showCameraPage"
-                android:background="@drawable/camera_icon" />
+                android:background="@drawable/camera_icon"
+                android:onClick="showCameraPage" />
         </LinearLayout>
 
         <LinearLayout
@@ -135,9 +138,9 @@
                 android:id="@+id/info_btn"
                 android:layout_width="50sp"
                 android:layout_height="50sp"
-                android:onClick="showInfoPage"
                 android:layout_gravity="center"
-                android:background="@drawable/informacion_icon" />
+                android:background="@drawable/informacion_icon"
+                android:onClick="showInfoPage" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

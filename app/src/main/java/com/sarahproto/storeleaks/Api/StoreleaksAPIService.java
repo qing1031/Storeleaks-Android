@@ -59,7 +59,7 @@ public interface StoreleaksAPIService {
     @FormUrlEncoded
     @POST("api/v1/search")
     Call<SearchResponse> searchItem(@Field("name") String name,
-                                    @Field("city") String city,
+                                    @Field("country") String country,
                                     @Field("start_pos") int start_pos,
                                     @Field("amount") int amount);
 

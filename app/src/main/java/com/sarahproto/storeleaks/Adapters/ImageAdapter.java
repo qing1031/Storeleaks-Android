@@ -35,17 +35,16 @@ public class ImageAdapter extends BaseAdapter {
     public static final String IMAGE_TYPE = "image/*";
 
     ImageView selectedImage;
-    TextView nameTxt, shopNametxt, locTitleTxt, locationTxt, detailedLocTitileTxt, detailedLocTxt, descriptionTxt, likeNumTxt;
+    TextView nameTxt, shopNametxt, locTitleTxt, locationTxt, detailedLocTitileTxt;
+    TextView detailedLocTxt, descriptionTxt, likeNumTxt, uploadDtTxt;
     ImageButton likeBtn, shareBtn;
     ProgressBar progressBar;
 
-    String[] resultName;
     Bitmap[] resultBmps;
     List<SearchItemResult> resultList;
     Holder holder;
 
-    public ImageAdapter(Activity activity, String[] imageNameList, Bitmap[] bitmaps, List<SearchItemResult> resultData) {
-        resultName = imageNameList;
+    public ImageAdapter(Activity activity, Bitmap[] bitmaps, List<SearchItemResult> resultData) {
         context = activity;
         resultBmps = bitmaps;
         resultList = resultData;
@@ -83,7 +82,7 @@ public class ImageAdapter extends BaseAdapter {
         holder.tv = (TextView) rowView.findViewById(R.id.textView1);
         holder.img = (ImageView) rowView.findViewById(R.id.imageView1);
 
-        holder.tv.setText(resultName[position]);
+        holder.tv.setText(resultList.get(position).getName());
         holder.img.setImageBitmap(resultBmps[position]);
 
         // click the items of the search result.
@@ -91,7 +90,7 @@ public class ImageAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Log.d("List item clicked", String.valueOf(position));
-                Log.d("Selcted Item Name", resultName[position]);
+                Log.d("Selcted Item Name", resultList.get(position).getName());
                 Log.d("Result list", String.valueOf(resultList));
 
                 Dialog detailsDialog = new Dialog(context);
@@ -106,6 +105,7 @@ public class ImageAdapter extends BaseAdapter {
                 locationTxt = (TextView) detailsDialog.findViewById(R.id.locationTxt);
                 detailedLocTitileTxt = (TextView) detailsDialog.findViewById(R.id.detailedLocationTitleTxt);
                 detailedLocTxt = (TextView) detailsDialog.findViewById(R.id.detailedLocationTxt);
+                uploadDtTxt = (TextView) detailsDialog.findViewById(R.id.uploadDateTxt);
                 descriptionTxt = (TextView) detailsDialog.findViewById(R.id.descriptionTxt);
                 likeNumTxt = (TextView) detailsDialog.findViewById(R.id.likeNumTxt);
                 likeBtn = (ImageButton) detailsDialog.findViewById(R.id.likeBtn);
@@ -114,7 +114,7 @@ public class ImageAdapter extends BaseAdapter {
                 progressBar.setVisibility(View.GONE);
 
                 selectedImage.setImageBitmap(resultBmps[position]);
-                nameTxt.setText(resultName[position]);
+                nameTxt.setText(resultList.get(position).getName());
                 shopNametxt.setText(resultList.get(position).getShop());
                 locationTxt.setText(resultList.get(position).getCountry());
                 if (locationTxt.getText().toString().trim().isEmpty()) {
@@ -126,6 +126,7 @@ public class ImageAdapter extends BaseAdapter {
                     detailedLocTitileTxt.setVisibility(View.GONE);
                     detailedLocTxt.setVisibility(View.GONE);
                 }
+                uploadDtTxt.setText(resultList.get(position).getDatet());
                 descriptionTxt.setText(resultList.get(position).getDesc());
 
                 likeNumTxt.setVisibility(View.GONE);
