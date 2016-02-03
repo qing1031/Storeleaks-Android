@@ -2,23 +2,22 @@ package com.sarahproto.storeleaks.Response;
 
 import java.util.List;
 
-public class UserLoginResponse {
+public class SearchResponse {
     private Boolean error;
-    public static List<LoginDataResult> data;
+    private List<SearchItemResult> data;
 
     public Boolean getError() {
         return error;
     }
 
-    public List<LoginDataResult> getData() {
+    public List<SearchItemResult> getData() {
         return data;
     }
 
     @Override
     public String toString() {
-        return "UserLoginResponse{" +
-                "error='" + error + '\'' +
-                ", data=" + data.toString() +
+        return "SearchResponse{" +
+                "data=" + data +
                 '}';
     }
 }

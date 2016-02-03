@@ -1,7 +1,7 @@
 package com.sarahproto.storeleaks.Activities;
 
-import android.content.Intent;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;

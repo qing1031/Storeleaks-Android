@@ -67,12 +67,21 @@
         android:paddingLeft="5sp"
         android:textSize="20sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0sp"
         android:layout_weight="8"
-        android:orientation="vertical"
         android:paddingTop="20dp">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:progressDrawable="@drawable/circular_progress_view"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
 
         <GridView
             android:id="@+id/grid_search"
@@ -85,7 +94,7 @@
             android:numColumns="1"
             android:stretchMode="columnWidth"
             android:verticalSpacing="60sp" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

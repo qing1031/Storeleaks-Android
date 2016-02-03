@@ -14,7 +14,6 @@ import com.mrunia.instagram.sdk.Instagram;
 import com.mrunia.instagram.sdk.InstagramAuthConfig;
 import com.mrunia.instagram.sdk.InstagramLoginButton;
 import com.mrunia.instagram.sdk.InstagramSession;
-import com.sarahproto.storeleaks.Adapters.ImageAdapter;
 import com.sarahproto.storeleaks.R;
 
 public class LocationActivity extends Activity {
@@ -54,7 +53,7 @@ public class LocationActivity extends Activity {
         editor = preferences.edit();
 
         gv = (GridView) findViewById(R.id.grid_search);
-        gv.setAdapter(new ImageAdapter(this, imageNameList, images));
+//        gv.setAdapter(new ImageAdapter(this, imageNameList, images, ));
 
         TextView logout_txt = (TextView) findViewById(R.id.logout_btn);
         logout_txt.setOnClickListener(new View.OnClickListener() {

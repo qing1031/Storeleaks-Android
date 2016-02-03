@@ -47,7 +47,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/edit_text_background"
-        android:drawableLeft="@drawable/edit_search_icon"
+        android:drawableLeft="@drawable/edit_location_icon"
         android:hint="@string/search_edit_hint"
         android:imeOptions="actionSearch"
         android:inputType="text"

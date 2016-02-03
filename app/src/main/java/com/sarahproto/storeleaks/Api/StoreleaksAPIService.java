@@ -1,6 +1,7 @@
 package com.sarahproto.storeleaks.Api;
 
 import com.sarahproto.storeleaks.Response.AddItemResponse;
+import com.sarahproto.storeleaks.Response.SearchResponse;
 import com.sarahproto.storeleaks.Response.UserLoginResponse;
 import com.sarahproto.storeleaks.Response.UserRegisterResponse;
 import com.squareup.okhttp.RequestBody;
@@ -51,4 +52,25 @@ public interface StoreleaksAPIService {
                                   @Part("location") String location,
                                   @Part("location_more") String location_more,
                                   @Part("description") String description);
+
+    /**
+     * Search Items
+     */
+    @FormUrlEncoded
+    @POST("api/v1/search")
+    Call<SearchResponse> searchItem(@Field("name") String name,
+                                    @Field("city") String city,
+                                    @Field("start_pos") int start_pos,
+                                    @Field("amount") int amount);
+
+    /**
+     * Get List Items
+     */
+    @FormUrlEncoded
+    @POST("api/v1/getListItem")
+    Call<SearchResponse> getListItem(@Field("country") String country,
+                                     @Field("city") String city,
+                                     @Field("start_pos") int start_pos,
+                                     @Field("amount") int amount);
+
 }

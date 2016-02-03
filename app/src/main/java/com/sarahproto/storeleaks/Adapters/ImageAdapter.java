@@ -8,9 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -25,41 +23,40 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.sarahproto.storeleaks.R;
+import com.sarahproto.storeleaks.Response.SearchItemResult;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ImageAdapter extends BaseAdapter {
 
-    String[] result;
-    int[] imageId;
-    public static final String IMAGE_TYPE = "image/*";
-    private static LayoutInflater inflater = null;
     private final Context context;
+    private static LayoutInflater inflater = null;
+    public static final String IMAGE_TYPE = "image/*";
 
-    public static final String URL =
-            "http://storeleaks.com/img/items/57ef6eb594a614088dcb34466c9fcd2b.png";
     ImageView selectedImage;
-    TextView nameTxt, shopNametxt, locationTxt, descriptionTxt, likeNumTxt;
+    TextView nameTxt, shopNametxt, locTitleTxt, locationTxt, detailedLocTitileTxt, detailedLocTxt, descriptionTxt, likeNumTxt;
     ImageButton likeBtn, shareBtn;
     ProgressBar progressBar;
 
-    public ImageAdapter(Activity activity, String[] imageNameList, int[] images) {
-        result = imageNameList;
+    String[] resultName;
+    Bitmap[] resultBmps;
+    List<SearchItemResult> resultList;
+    Holder holder;
+
+    public ImageAdapter(Activity activity, String[] imageNameList, Bitmap[] bitmaps, List<SearchItemResult> resultData) {
+        resultName = imageNameList;
         context = activity;
-        imageId = images;
+        resultBmps = bitmaps;
+        resultList = resultData;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
         // number of datelements to be displayed.
-        return result.length - 1;
+//        return result.length - 1;
+        return resultBmps.length;
     }
 
     @Override
@@ -79,20 +76,23 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        Holder holder = new Holder();
+        holder = new Holder();
         View rowView;
 
         rowView = inflater.inflate(R.layout.grid_item, null);
         holder.tv = (TextView) rowView.findViewById(R.id.textView1);
         holder.img = (ImageView) rowView.findViewById(R.id.imageView1);
 
-        holder.tv.setText(result[position]);
-        holder.img.setImageResource(imageId[position]);
+        holder.tv.setText(resultName[position]);
+        holder.img.setImageBitmap(resultBmps[position]);
 
         // click the items of the search result.
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("List item clicked", String.valueOf(position));
+                Log.d("Selcted Item Name", resultName[position]);
+                Log.d("Result list", String.valueOf(resultList));
 
                 Dialog detailsDialog = new Dialog(context);
                 detailsDialog.setContentView(R.layout.result_details_dialog);
@@ -102,7 +102,10 @@ public class ImageAdapter extends BaseAdapter {
                 selectedImage = (ImageView) detailsDialog.findViewById(R.id.selectedItemImageView);
                 nameTxt = (TextView) detailsDialog.findViewById(R.id.nameTxt);
                 shopNametxt = (TextView) detailsDialog.findViewById(R.id.shopNameTxt);
+                locTitleTxt = (TextView) detailsDialog.findViewById(R.id.locationTitleTxt);
                 locationTxt = (TextView) detailsDialog.findViewById(R.id.locationTxt);
+                detailedLocTitileTxt = (TextView) detailsDialog.findViewById(R.id.detailedLocationTitleTxt);
+                detailedLocTxt = (TextView) detailsDialog.findViewById(R.id.detailedLocationTxt);
                 descriptionTxt = (TextView) detailsDialog.findViewById(R.id.descriptionTxt);
                 likeNumTxt = (TextView) detailsDialog.findViewById(R.id.likeNumTxt);
                 likeBtn = (ImageButton) detailsDialog.findViewById(R.id.likeBtn);
@@ -110,7 +113,21 @@ public class ImageAdapter extends BaseAdapter {
                 progressBar = (ProgressBar) detailsDialog.findViewById(R.id.progressBar);
                 progressBar.setVisibility(View.GONE);
 
-                nameTxt.setText(result[position]);
+                selectedImage.setImageBitmap(resultBmps[position]);
+                nameTxt.setText(resultName[position]);
+                shopNametxt.setText(resultList.get(position).getShop());
+                locationTxt.setText(resultList.get(position).getCountry());
+                if (locationTxt.getText().toString().trim().isEmpty()) {
+                    locationTxt.setVisibility(View.GONE);
+                    locTitleTxt.setVisibility(View.GONE);
+                }
+                detailedLocTxt.setText(resultList.get(position).getLocation_more());
+                if (detailedLocTxt.getText().toString().trim().isEmpty()) {
+                    detailedLocTitileTxt.setVisibility(View.GONE);
+                    detailedLocTxt.setVisibility(View.GONE);
+                }
+                descriptionTxt.setText(resultList.get(position).getDesc());
+
                 likeNumTxt.setVisibility(View.GONE);
 
                 likeBtn.setOnClickListener(new View.OnClickListener() {
@@ -124,83 +141,17 @@ public class ImageAdapter extends BaseAdapter {
                 shareBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Create an object for subclass of AsyncTask
-                        GetXMLTask task = new GetXMLTask();
-                        // Execute the task
-                        task.execute(URL);
-
-                        progressBar.setVisibility(View.VISIBLE);        // Run progressbar
+                        // Share this item.
+                        onShareProfile(nameTxt.getText().toString(),
+                                locationTxt.getText().toString(),
+                                descriptionTxt.getText().toString(),
+                                resultBmps[position]);
                     }
                 });
             }
         });
 
         return rowView;
-    }
-
-    // Get the bitmap from image url. and share the image
-    private class GetXMLTask extends AsyncTask<String, Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            Bitmap map = null;
-            for (String url : urls) {
-                map = downloadImage(url);
-            }
-            return map;
-        }
-
-        // Sets the Bitmap returned by doInBackground
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            // Set the imageview from the url here.
-
-            // Share the informations with this result bitmap.
-            onShareProfile(nameTxt.getText().toString(),
-                    locationTxt.getText().toString(),
-                    descriptionTxt.getText().toString(),
-                    result);
-
-            progressBar.setVisibility(View.GONE);       // Stop progressbar
-        }
-
-        // Creates Bitmap from InputStream and returns it
-        private Bitmap downloadImage(String url) {
-            Bitmap bitmap = null;
-            InputStream stream;
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inSampleSize = 1;
-
-            try {
-                stream = getHttpConnection(url);
-                bitmap = BitmapFactory.
-                        decodeStream(stream, null, bmOptions);
-                stream.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        // Makes HttpURLConnection and returns InputStream
-        private InputStream getHttpConnection(String urlString)
-                throws IOException {
-            InputStream stream = null;
-            URL url = new URL(urlString);
-            URLConnection connection = url.openConnection();
-
-            try {
-                HttpURLConnection httpConnection = (HttpURLConnection) connection;
-                httpConnection.setRequestMethod("GET");
-                httpConnection.connect();
-
-                if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    stream = httpConnection.getInputStream();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            return stream;
-        }
     }
 
     // Share the profile
