@@ -181,10 +181,11 @@ public class SearchActivity extends Activity {
 
     // Start the searching.
     public void startSearching() {
+        Log.d("SearchActivity", "Start Searching");
 
         searchItems(nameSearchEdit.getText().toString(),
                 locSearchEdit.getText().toString(),
-                0, 20);
+                0, 50);
 
         progressBar.setVisibility(View.VISIBLE);
         nameSearchEdit.setEnabled(false);
@@ -193,6 +194,8 @@ public class SearchActivity extends Activity {
 
     // finish the searching.
     public void finishSearching() {
+        Log.d("SearchActivity", "Finish Searching");
+
         progressBar.setVisibility(View.GONE);
         nameSearchEdit.setEnabled(true);
         locSearchEdit.setEnabled(true);
@@ -235,15 +238,15 @@ public class SearchActivity extends Activity {
             public void onResponse(Response<SearchResponse> response, Retrofit retrofit) {
                 if (response.code() == HttpURLConnection.HTTP_OK) {
 
-                    String[] imageUrls = new String[response.body().getData().size()];
-
-                    resultData = response.body().getData();
-
                     Log.d("Response Result", response.body().toString());
-                    Log.d("Items size", String.valueOf(imageUrls.length));
 
                     if (!response.body().getError()) {
                         Log.d("Status", "Search Success");
+
+                        String[] imageUrls = new String[response.body().getData().size()];
+                        resultData = response.body().getData();
+
+                        Log.d("Items size", String.valueOf(imageUrls.length));
 
                         int amount = response.body().getData().size();
                         for (int i = 0; i < amount; i++) {
@@ -300,12 +303,14 @@ public class SearchActivity extends Activity {
 
         // Creates Bitmap from InputStream and returns it
         private Bitmap downloadImage(String url) {
+            Log.d("Step", "1");
             Bitmap bitmap = null;
             InputStream stream;
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inSampleSize = 1;
+            bmOptions.inSampleSize = 4;
 
             try {
+                Log.d("Step", "2");
                 stream = getHttpConnection(url);
                 bitmap = BitmapFactory.
                         decodeStream(stream, null, bmOptions);
@@ -313,6 +318,7 @@ public class SearchActivity extends Activity {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+            Log.d("Step", "3");
             return bitmap;
         }
 

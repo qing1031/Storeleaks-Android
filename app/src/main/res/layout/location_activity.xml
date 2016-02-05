@@ -42,6 +42,7 @@
     </RelativeLayout>
 
     <EditText
+        android:id="@+id/locationSearchEdit"
         android:layout_width="match_parent"
         android:layout_height="45sp"
         android:layout_marginLeft="20dp"
@@ -53,14 +54,12 @@
         android:enabled="false"
         android:imeOptions="actionSearch"
         android:inputType="text"
-        android:paddingLeft="5sp"
-        android:text="Kiev" />
+        android:paddingLeft="5sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0sp"
         android:layout_weight="8"
-        android:orientation="vertical"
         android:paddingTop="10dp">
 
         <GridView
@@ -74,7 +73,17 @@
             android:numColumns="1"
             android:stretchMode="columnWidth"
             android:verticalSpacing="30sp" />
-    </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:progressDrawable="@drawable/circular_progress_view"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

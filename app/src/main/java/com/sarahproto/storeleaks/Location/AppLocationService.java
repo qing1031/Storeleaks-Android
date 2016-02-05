@@ -1,4 +1,4 @@
-package com.sarahproto.storeleaks.Adapters;
+package com.sarahproto.storeleaks.Location;
 
 import android.app.Service;
 import android.content.Context;

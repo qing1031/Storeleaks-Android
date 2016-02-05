@@ -27,8 +27,12 @@ public class TwitterLoginActivity extends Activity {
     SharedPreferences.Editor editor;
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "gxiUjlmrXmXCo1DsLYMKhrpIf";
-    private static final String TWITTER_SECRET = "EH651p2REGMV0CNq5PiiLucbSb7hHO3Oql8YEtwoymeNH3SQG4";
+//    private static final String TWITTER_KEY = "gxiUjlmrXmXCo1DsLYMKhrpIf";
+//    private static final String TWITTER_SECRET = "EH651p2REGMV0CNq5PiiLucbSb7hHO3Oql8YEtwoymeNH3SQG4";
+
+    private static final String TWITTER_KEY = "1JquAVCvco1dq7a2VYQTV2aAI";
+    private static final String TWITTER_SECRET = "23yzefBG6tUulSRA7BIzPmVHuROq9TfOtczNqJHBPEu7hPHFsI";
+
 
     private TwitterLoginButton twitterLoginButton;
 
@@ -43,8 +47,6 @@ public class TwitterLoginActivity extends Activity {
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
-//        Fabric.with(this, new Twitter(authConfig), new Crashlytics());
-
         setContentView(R.layout.twitter_login_activity);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);

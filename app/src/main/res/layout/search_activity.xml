@@ -74,16 +74,6 @@
         android:layout_weight="8"
         android:paddingTop="10dp">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:progressDrawable="@drawable/circular_progress_view"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
         <GridView
             android:id="@+id/grid_search"
             android:layout_width="match_parent"
@@ -95,6 +85,16 @@
             android:numColumns="1"
             android:stretchMode="columnWidth"
             android:verticalSpacing="30sp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:progressDrawable="@drawable/circular_progress_view"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
     <LinearLayout

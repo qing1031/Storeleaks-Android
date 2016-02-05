@@ -135,7 +135,7 @@ public class ImageAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         likeNumTxt.setVisibility(View.VISIBLE);
-                        likeNumTxt.setText("2");
+                        likeNumTxt.setText("1");
                     }
                 });
 

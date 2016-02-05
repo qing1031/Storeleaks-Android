@@ -4,7 +4,8 @@ import java.util.List;
 
 public class UserLoginResponse {
     private Boolean error;
-    public static List<LoginDataResult> data;
+    private List<LoginDataResult> data;
+    private String message;
 
     public Boolean getError() {
         return error;
@@ -14,11 +15,15 @@ public class UserLoginResponse {
         return data;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
     @Override
     public String toString() {
         return "UserLoginResponse{" +
                 "error='" + error + '\'' +
-                ", data=" + data.toString() +
+                ", data=" + data +
                 '}';
     }
 }

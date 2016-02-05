@@ -23,7 +23,6 @@ import com.sarahproto.storeleaks.R;
 import com.sarahproto.storeleaks.Response.UserLoginResponse;
 import com.sarahproto.storeleaks.Social.FacebookLoginActivity;
 import com.sarahproto.storeleaks.Social.InstagramLoginActivity;
-import com.sarahproto.storeleaks.Social.TwitterLoginActivity;
 
 import java.net.HttpURLConnection;
 
@@ -156,6 +155,9 @@ public class LoginActivity extends Activity {
 
                         startActivity(new Intent(LoginActivity.this, LocationActivity.class));
                         finish();
+                    } else {
+                        Log.d("Status", "isn't logged in");
+                        Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
                     }
 
                 } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
@@ -182,8 +184,8 @@ public class LoginActivity extends Activity {
 
     // Twitter Login
     public void loginTwitter(View view) {
-        startActivity(new Intent(LoginActivity.this, TwitterLoginActivity.class));
-        finish();
+//        startActivity(new Intent(LoginActivity.this, TwitterLoginActivity.class));
+//        finish();
     }
 
     // Instagram Login
