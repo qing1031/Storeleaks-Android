@@ -11,14 +11,11 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.sarahproto.storeleaks.Location.AppLocationService;
 import com.sarahproto.storeleaks.R;
 
 public class MainActivity extends Activity {
     SharedPreferences preferences;
     Double latitude, longitude;
-
-    AppLocationService appLocationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +24,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        appLocationService = new AppLocationService(
-                MainActivity.this);
 
         final TextView understand_txt = (TextView) findViewById(R.id.understand_txt);
         understand_txt.setOnTouchListener(new View.OnTouchListener() {

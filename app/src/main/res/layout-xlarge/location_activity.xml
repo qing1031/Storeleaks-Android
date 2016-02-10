@@ -46,11 +46,11 @@
         android:layout_marginRight="20dp"
         android:background="@drawable/edit_text_background"
         android:drawableLeft="@drawable/edit_location_icon"
-        android:editable="false"
+        android:drawablePadding="20dp"
         android:hint="Current Location"
         android:imeOptions="actionSearch"
         android:inputType="text"
-        android:paddingLeft="5sp"
+        android:paddingLeft="10sp"
         android:textSize="20sp" />
 
     <RelativeLayout
@@ -76,10 +76,10 @@
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:progressDrawable="@drawable/circular_progress_view"
+            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_gravity="bottom"
+            android:progressDrawable="@drawable/circular_progress_view" />
     </RelativeLayout>
 
     <LinearLayout

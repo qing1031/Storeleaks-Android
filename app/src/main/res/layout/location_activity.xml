@@ -48,10 +48,9 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/edit_text_background"
-        android:editable="false"
         android:drawableLeft="@drawable/edit_location_icon"
         android:hint="Current Location"
-        android:enabled="false"
+        android:drawablePadding="10dp"
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:paddingLeft="5sp" />

@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -55,7 +56,7 @@ public class SearchActivity extends Activity {
     String INSTA_CLIENT_ID = "5c79b244f5624229abf66c3a62e8b277";
     String INSTA_CLIENT_SECRET = "f9f0e6ea2d14430aaefcd83e4dabe735";
     String INSTA_CALLBACK_URL = "http://storeleaks.com/";
-    String[] INSTA_SCOPES = {"relationships", "likes", "comments" }; // or whatever your scopes are.
+    String[] INSTA_SCOPES = {"relationships", "likes", "comments"}; // or whatever your scopes are.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +122,8 @@ public class SearchActivity extends Activity {
 
                         Log.d("Clicked", "Name Search edittext");
 
-                        if (nameSearchEdit.getText().toString().trim().isEmpty()) {
+                        if (nameSearchEdit.getText().toString().trim().isEmpty()
+                                && locSearchEdit.getText().toString().trim().isEmpty()) {
                             nameSearchEdit.setError("Please fill out this field");
                             nameSearchEdit.focusSearch(View.FOCUS_DOWN);
 
@@ -130,6 +132,24 @@ public class SearchActivity extends Activity {
                         }
 
                         return true;
+                    }
+                }
+
+                return false;
+            }
+        });
+        nameSearchEdit.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_ENTER:
+                        case KeyEvent.KEYCODE_SEARCH:
+                            startSearching();
+                            return true;
+
+                        default:
+                            break;
                     }
                 }
 
@@ -162,6 +182,23 @@ public class SearchActivity extends Activity {
                 return false;
             }
         });
+        locSearchEdit.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_ENTER:
+                        case KeyEvent.KEYCODE_SEARCH:
+                            startSearching();
+                            return true;
+
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
 
 
         if (preferences.getString("LoginResult", "").equals("skip")) {
@@ -185,7 +222,7 @@ public class SearchActivity extends Activity {
 
         searchItems(nameSearchEdit.getText().toString(),
                 locSearchEdit.getText().toString(),
-                0, 50);
+                0, 40);
 
         progressBar.setVisibility(View.VISIBLE);
         nameSearchEdit.setEnabled(false);
@@ -262,18 +299,27 @@ public class SearchActivity extends Activity {
                     } else {
                         Log.d("Status", "No item");
                         Toast.makeText(getApplicationContext(), "Could not search items", Toast.LENGTH_LONG).show();
+
+                        gv.setAdapter(null);
+                        finishSearching();
                     }
 
                 } else if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
                     Log.d("Response Result", "Unauthorized");
-                    Toast.makeText(getApplicationContext(), "Unauthorized", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Httpconnection Unauthorized", Toast.LENGTH_LONG).show();
+
+                    gv.setAdapter(null);
+                    finishSearching();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Log.d("Status", "Failure");
-                Toast.makeText(getApplicationContext(), "Failure", Toast.LENGTH_LONG).show();
+                Log.d("Status", t.getMessage());
+                Toast.makeText(getApplicationContext(), "Server Connection Failure", Toast.LENGTH_LONG).show();
+
+                gv.setAdapter(null);
+                finishSearching();
             }
         });
     }

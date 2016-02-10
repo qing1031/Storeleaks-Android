@@ -1,11 +1,14 @@
 package com.sarahproto.storeleaks.Activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 import com.facebook.appevents.AppEventsLogger;
 import com.sarahproto.storeleaks.Api.StoreleaksAPIClient;
 import com.sarahproto.storeleaks.Api.StoreleaksAPIService;
+import com.sarahproto.storeleaks.Location.GPSTracker;
 import com.sarahproto.storeleaks.R;
 import com.sarahproto.storeleaks.Response.UserLoginResponse;
 import com.sarahproto.storeleaks.Social.FacebookLoginActivity;
@@ -85,6 +89,8 @@ public class LoginActivity extends Activity {
 
                     String email_pattern = "[a-zA-Z0-9._-]+@[a-z0-9]+\\.+[a-z]+";
 
+                    GPSTracker gpsTracker = new GPSTracker(LoginActivity.this, LoginActivity.this);
+
                     // Compare the user login info.
                     if (TextUtils.isEmpty(email)) {
                         emailEdit.setError("Please fill out this field.");
@@ -99,7 +105,11 @@ public class LoginActivity extends Activity {
                         passwordEdit.focusSearch(View.FOCUS_DOWN);
 
 
+                    } else if (!gpsTracker.isCanGetLocation()) {
+                        showSettingsAlert();
+
                     } else {
+
                         // ***User Login***
                         loginUser(email, password);
                         login_btn.setEnabled(false);
@@ -128,6 +138,29 @@ public class LoginActivity extends Activity {
                 return true;
             }
         });
+    }
+
+    // Show the location setting alert.
+    public void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                LoginActivity.this);
+        alertDialog.setTitle("SETTINGS");
+        alertDialog.setMessage("Enable Location Provider! Go to settings menu");
+        alertDialog.setPositiveButton("Settings",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(
+                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        LoginActivity.this.startActivity(intent);
+                    }
+                });
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
     }
 
     // Email Login

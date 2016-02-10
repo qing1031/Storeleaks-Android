@@ -1,24 +1,19 @@
 package com.sarahproto.storeleaks.Activities;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -33,8 +28,8 @@ import com.mrunia.instagram.sdk.InstagramSession;
 import com.sarahproto.storeleaks.Adapters.ImageAdapter;
 import com.sarahproto.storeleaks.Api.StoreleaksAPIClient;
 import com.sarahproto.storeleaks.Api.StoreleaksAPIService;
-import com.sarahproto.storeleaks.Location.AppLocationService;
-import com.sarahproto.storeleaks.Location.LocationAddress;
+import com.sarahproto.storeleaks.Location.AddressJSON;
+import com.sarahproto.storeleaks.Location.GPSTracker;
 import com.sarahproto.storeleaks.R;
 import com.sarahproto.storeleaks.Response.SearchItemResult;
 import com.sarahproto.storeleaks.Response.SearchResponse;
@@ -55,11 +50,10 @@ import retrofit.Retrofit;
 public class LocationActivity extends Activity {
     GridView gv;
     InstagramLoginButton instagramLogin;
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
+    public static SharedPreferences preferences;
+    public static SharedPreferences.Editor editor;
 
     EditText locationSearchEdt;
-    ProgressBar progressBar;
 
     public String URL_PREFIX = "http://storeleaks.com/img/items/";
     public List<SearchItemResult> resultData;
@@ -69,14 +63,15 @@ public class LocationActivity extends Activity {
     String INSTA_CALLBACK_URL = "http://storeleaks.com/";
     String[] INSTA_SCOPES = {"relationships", "likes", "comments"}; // or whatever your scopes are.
     String TAG = "LocationActivity";
+    String cityName, countryName;
 
-    AppLocationService appLocationService;
-    private LocationManager locationMangaer = null;
-    private LocationListener locationListener = null;
+    public static ProgressBar progressBar;
+    public static Activity context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
 
         InstagramAuthConfig instaAuthConfig = new InstagramAuthConfig(INSTA_CLIENT_ID, INSTA_CLIENT_SECRET, INSTA_CALLBACK_URL, INSTA_SCOPES);
         Instagram.with(this, instaAuthConfig);
@@ -87,12 +82,11 @@ public class LocationActivity extends Activity {
         editor = preferences.edit();
 
         gv = (GridView) findViewById(R.id.grid_search);
-        locationSearchEdt = (EditText) findViewById(R.id.locationSearchEdit);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
-        locationMangaer = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
+        cityName = preferences.getString("CurrentLocationCity", "");
+        countryName = preferences.getString("CurrentLocationCountry", "");
 
         TextView logout_txt = (TextView) findViewById(R.id.logout_btn);
         logout_txt.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +94,48 @@ public class LocationActivity extends Activity {
             public void onClick(View v) {
 //                LoginManager.getInstance().logOut();
                 logoutProfile();
+            }
+        });
+
+        locationSearchEdt = (EditText) findViewById(R.id.locationSearchEdit);
+        locationSearchEdt.setText("");
+        locationSearchEdt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+
+                    if (event.getRawX() <=
+                            (locationSearchEdt.getCompoundDrawables()[DRAWABLE_LEFT].getBounds().width() * 1.5)) {
+
+                        Log.d(TAG, "Search the things.");
+                        startSearching();
+
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        });
+        locationSearchEdt.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_ENTER:
+                        case KeyEvent.KEYCODE_SEARCH:
+                            startSearching();
+
+                            return true;
+
+                        default:
+                            break;
+                    }
+                }
+
+                return false;
             }
         });
 
@@ -126,6 +162,7 @@ public class LocationActivity extends Activity {
             }
         });
 
+        Log.d(TAG, "Current Location - " + cityName + ", " + countryName);
 
         if (preferences.getString("LoginResult", "").equals("skip")) {
             logout_txt.setVisibility(View.GONE);
@@ -137,13 +174,13 @@ public class LocationActivity extends Activity {
             logout_txt.setVisibility(View.VISIBLE);
             instagramLogin.setVisibility(View.GONE);
 
-            String curLoc = preferences.getString("CurrentLocation", "");
-            Log.d(TAG, "Current Location - " + curLoc);
-            if (curLoc.equals("")) {
+
+            if (cityName.equals("")) {
                 getLocation();          // Get the address
 
             } else {
-                locationSearchEdt.setText(curLoc);
+                String locationAddress = cityName + ", " + countryName;
+                locationSearchEdt.setText(locationAddress);
             }
 
 
@@ -151,20 +188,37 @@ public class LocationActivity extends Activity {
             logout_txt.setVisibility(View.GONE);
             instagramLogin.setVisibility(View.VISIBLE);
 
-            String curLoc = preferences.getString("CurrentLocation", "");
-            Log.d("Current Location", curLoc);
-            if (curLoc.equals("")) {
+
+            if (cityName.equals("")) {
                 getLocation();          // Get the address
 
             } else {
-                locationSearchEdt.setText(curLoc);
+                String locationAddress = cityName + ", " + countryName;
+                locationSearchEdt.setText(locationAddress);
             }
+        }
+    }
+
+    public void startSearching() {
+
+        String locationAddress = cityName + ", " + countryName;
+        if (locationSearchEdt.getText().toString().isEmpty()) {
+            locationSearchEdt.setError("Plese fill out this field.");
+
+        } else if (locationSearchEdt.getText().toString() == locationAddress) {
+            progressBar.setVisibility(View.VISIBLE);
+            searchItems(countryName, cityName, 0, 30);
+
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+            searchItems("", locationSearchEdt.getText().toString(), 0, 30);
         }
     }
 
     public void logoutProfile() {
         editor.putString("LoginResult", "skip");
-        editor.putString("CurrentLocation", "");
+        editor.putString("CurrentLocationCity", "");
+        editor.putString("CurrentLocationCountry", "");
         editor.apply();
 
         startActivity(new Intent(LocationActivity.this, LoginActivity.class));
@@ -271,7 +325,7 @@ public class LocationActivity extends Activity {
             Bitmap bitmap = null;
             InputStream stream;
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inSampleSize = 1;
+            bmOptions.inSampleSize = 4;
 
             try {
                 stream = getHttpConnection(url);
@@ -306,54 +360,25 @@ public class LocationActivity extends Activity {
         }
     }
 
-    public void getLocation() {
+    private void getLocation() {
 
-        locationListener = new MyLocationListener();
+        GPSTracker gpsTracker = new GPSTracker(this, this);
 
-        locationMangaer.requestLocationUpdates(LocationManager
-                .GPS_PROVIDER, 5000, 10, locationListener);
-    }
+        if (gpsTracker.isCanGetLocation()) {
+            progressBar.setVisibility(View.VISIBLE);
+            new AddressJSON(locationSearchEdt).execute(gpsTracker.getLatitude(), gpsTracker.getLongitude());
 
-    /*----------Listener class to get coordinates ------------- */
-    private class MyLocationListener implements LocationListener {
-
-        @Override
-        public void onLocationChanged(Location location) {
-            Log.v(TAG, "Longitude: " + location.getLongitude());
-            Log.v(TAG, "Latitude: " + location.getLatitude());
-
-            if (location != null) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                LocationAddress locationAddress = new LocationAddress();
-                locationAddress.getAddressFromLocation(latitude, longitude,
-                        getApplicationContext(), new GeocoderHandler());
-            } else {
-                showSettingsAlert();
-            }
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
+        } else {
+            showSettingsAlert();
         }
     }
 
+    // Show the location setting alert.
     public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(
                 LocationActivity.this);
         alertDialog.setTitle("SETTINGS");
-        alertDialog.setMessage("Enable Location Provider! Go to settings menu?");
+        alertDialog.setMessage("Enable Location Provider! Go to settings menu");
         alertDialog.setPositiveButton("Settings",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -369,36 +394,5 @@ public class LocationActivity extends Activity {
                     }
                 });
         alertDialog.show();
-    }
-
-    private class GeocoderHandler extends Handler {
-        @Override
-        public void handleMessage(Message message) {
-            String locationAddress;
-            switch (message.what) {
-                case 1:
-                    Bundle bundle = message.getData();
-                    locationAddress = bundle.getString("address");
-                    break;
-                default:
-                    locationAddress = null;
-            }
-            // Input the final location result here.
-            // Unable to get address for the current lat-long
-            if (locationAddress == null) {
-                Log.d(TAG, "Current Location" + " - Unable to get address");
-                locationSearchEdt.setText("Unable to get address");
-
-            } else {
-                Log.d(TAG, "Current Location" + locationAddress);
-                locationSearchEdt.setText(locationAddress);
-
-                editor.putString("CurrentLocation", locationAddress);
-                editor.apply();
-
-                // Search items from the lcoation address.
-                searchItems(locationAddress, "", 0, 100);
-            }
-        }
     }
 }

@@ -142,7 +142,7 @@
 
         <meta-data
             android:name="com.google.android.geo.AIzaSyCt5088wviR2wbfZcrPmoKQZtnR_U38PSs"
-            android:value="AIzaSyCt5088wviR2wbfZcrPmoKQZtnR_U38PSs"/>
+            android:value="AIzaSyCt5088wviR2wbfZcrPmoKQZtnR_U38PSs" />
 
         <provider
             android:name="com.facebook.FacebookContentProvider"
