@@ -100,6 +100,8 @@ public class AddressJSON extends AsyncTask<Double, Void, String> {
                     JSONArray mtypes = zero.getJSONArray("types");
                     String Type = mtypes.getString(0);
 
+                    Log.d("Reult", Type);
+
                     if (!TextUtils.isEmpty(long_name) || !long_name.equals("")) {
                         if (Type.equalsIgnoreCase("street_number")) {
                             Log.d("Address1 ", long_name);

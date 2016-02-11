@@ -63,11 +63,18 @@ public class LoginActivity extends Activity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    editor.putString("LoginResult", "skip");
-                    editor.apply();
+                    GPSTracker gpsTracker = new GPSTracker(LoginActivity.this, LoginActivity.this);
 
-                    startActivity(new Intent(LoginActivity.this, LocationActivity.class));
-                    finish();
+                    if (!gpsTracker.isCanGetLocation()) {
+                        showSettingsAlert();
+
+                    } else {
+                        editor.putString("LoginResult", "skip");
+                        editor.apply();
+
+                        startActivity(new Intent(LoginActivity.this, LocationActivity.class));
+                        finish();
+                    }
                 }
 
                 return true;

@@ -168,6 +168,14 @@ public class LocationActivity extends Activity {
             logout_txt.setVisibility(View.GONE);
             instagramLogin.setVisibility(View.GONE);
 
+            if (cityName.equals("")) {
+                getLocation();          // Get the address
+
+            } else {
+                String locationAddress = cityName + ", " + countryName;
+                locationSearchEdt.setText(locationAddress);
+            }
+
         } else if (preferences.getString("LoginResult", "").equals("facebook")
                 || preferences.getString("LoginResult", "").equals("twitter")
                 || preferences.getString("LoginResult", "").equals("email")) {

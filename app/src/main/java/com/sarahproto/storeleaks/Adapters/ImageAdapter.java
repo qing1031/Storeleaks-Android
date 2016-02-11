@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -82,7 +83,7 @@ public class ImageAdapter extends BaseAdapter {
         holder.tv = (TextView) rowView.findViewById(R.id.textView1);
         holder.img = (ImageView) rowView.findViewById(R.id.imageView1);
 
-        holder.tv.setText(resultList.get(position).getName());
+        holder.tv.setText(resultList.get(position).getShop());
         holder.img.setImageBitmap(resultBmps[position]);
 
         // click the items of the search result.
@@ -93,10 +94,23 @@ public class ImageAdapter extends BaseAdapter {
                 Log.d("Selcted Item Name", resultList.get(position).getName());
                 Log.d("Result list", String.valueOf(resultList));
 
-                Dialog detailsDialog = new Dialog(context);
+                final Dialog detailsDialog = new Dialog(context);
+                detailsDialog.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+
                 detailsDialog.setContentView(R.layout.result_details_dialog);
-                detailsDialog.setTitle("Item Details");
+
+                //sets our custom title(custom_title_dialog_box.xml) as the current title of the dialog box.
+                // The custom_title_dialog_box.xml contains a TextView with id: title_new_contact and an ImageView with id: x1_button.
+                detailsDialog.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title_dialog_box);
                 detailsDialog.show();
+
+                ImageButton closeBtn = (ImageButton) detailsDialog.findViewById(R.id.close_btn);
+                closeBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        detailsDialog.dismiss();
+                    }
+                });
 
                 selectedImage = (ImageView) detailsDialog.findViewById(R.id.selectedItemImageView);
                 nameTxt = (TextView) detailsDialog.findViewById(R.id.nameTxt);

@@ -18,6 +18,7 @@
     <string name="com_facebook_loginview_log_out_button">Logout</string>
     <string name="logout_str">Logout</string>
     <string name="login_facebook_str">Log in with Facebook</string>
+    <string name="item_details">Item Details</string>
 
 
 </resources>
